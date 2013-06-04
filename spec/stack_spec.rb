@@ -71,6 +71,23 @@ describe SimpleDeploy::Stack do
       ]
     end
 
+    it "should update a stack from template if one is passed in" do
+      mock_file = double("a file", :read => "template")
+      mock_file.should_receive(:read)
+      @entry_mock.should_receive(:attributes).and_return({})
+      @entry_mock.should_receive(:set_attributes).with(@expected_attributes)
+      @entry_mock.should_receive(:save).and_return(true)
+
+      SimpleDeploy::StackCreator.should_receive(:new).
+                                 with(:name          => 'test-stack',
+                                      :entry         => @entry_mock,
+                                      :template_file => mock_file).
+                                and_return @stack_creator_mock
+      @stack_creator_mock.should_receive(:update).with(mock_file)
+        
+      @stack.update :attributes => @new_attributes, :template => 'template'
+    end
+
     it "should update when the deployment is not locked" do
       deployment_stub = stub 'deployment', :clear_for_deployment? => true
       @stack.stub(:deployment).and_return(deployment_stub)
