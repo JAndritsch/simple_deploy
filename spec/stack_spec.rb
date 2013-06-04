@@ -81,7 +81,8 @@ describe SimpleDeploy::Stack do
       SimpleDeploy::StackUpdater.should_receive(:new).
                                  with(:name          => 'test-stack',
                                       :entry         => @entry_mock,
-                                      :template_body => 'some_json').
+                                      :template_body => 'some_json',
+                                      :template_file => nil).
                                  and_return @stack_updater_mock
       @stack_updater_mock.should_receive(:update_stack_if_parameters_changed).
                           and_return(true)
@@ -116,7 +117,8 @@ describe SimpleDeploy::Stack do
       SimpleDeploy::StackUpdater.should_receive(:new).
                                  with(:name          => 'test-stack',
                                       :entry         => @entry_mock,
-                                      :template_body => 'some_json').
+                                      :template_body => 'some_json',
+                                      :template_file => nil).
                                  and_return @stack_updater_mock
       @stack_updater_mock.should_receive(:update_stack_if_parameters_changed).
                           and_return(true)
