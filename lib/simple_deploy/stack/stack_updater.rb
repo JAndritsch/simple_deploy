@@ -8,7 +8,11 @@ module SimpleDeploy
       @logger = SimpleDeploy.logger
       @entry = args[:entry]
       @name = args[:name]
-      @template_body = args[:template_body]
+      if args[:template_file]
+        @template_body = read_template_from_file args[:template_file]
+      else
+        @template_body = args[:template_body]
+      end
     end
 
     def update_stack_if_parameters_changed(attributes)
@@ -26,12 +30,17 @@ module SimpleDeploy
     def update
       if status.wait_for_stable
         @logger.info "Updating Cloud Formation stack #{@name}."
-        cloud_formation.update :name => @name,
+        response = cloud_formation.update :name => @name,
                                :parameters => read_parameters_from_entry_attributes,
                                :template => @template_body
       else
         raise "#{@name} did not reach a stable state."
       end
+    end
+
+    def read_template_from_file(template_file)
+      file = File.open template_file
+      file.read
     end
 
     def parameter_updated?(attributes)

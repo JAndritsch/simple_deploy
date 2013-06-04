@@ -48,6 +48,7 @@ module SimpleDeploy
         @logger.info "Updating #{@name}."
         attributes = stack_attribute_formatter.updated_attributes args[:attributes]
         @template_body = template
+        @template_file = args[:template]
 
         @entry.set_attributes attributes
         stack_updater.update_stack_if_parameters_changed attributes
@@ -168,7 +169,8 @@ module SimpleDeploy
     def stack_updater
       @stack_updater ||= StackUpdater.new :name          => @name,
                                           :entry         => @entry,
-                                          :template_body => @template_body
+                                          :template_body => @template_body,
+                                          :template_file => @template_file
     end
 
     def stack_reader

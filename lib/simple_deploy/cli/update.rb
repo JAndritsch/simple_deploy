@@ -25,6 +25,7 @@ EOS
                                                                   :default => 'info'
           opt :name, "Stack name(s) of stack to deploy", :type => :string,
                                                          :multi => true
+          opt :template, "Path to the template file", :type => :string
         end
 
         valid_options? :provided => @opts,
@@ -40,7 +41,8 @@ EOS
                             :environment => @opts[:environment]
 
           rescue_exceptions_and_exit do
-            stack.update :force => @opts[:force], :attributes => attributes
+            stack.update :force => @opts[:force], :attributes => attributes,
+                         :template   => @opts[:template]
           end
         end
       end
