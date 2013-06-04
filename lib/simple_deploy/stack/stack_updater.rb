@@ -9,7 +9,6 @@ module SimpleDeploy
       @entry = args[:entry]
       @name = args[:name]
       if args[:template_file]
-        raise "OH HAI"
         @template_body = read_template_from_file args[:template_file]
       else
         @template_body = args[:template_body]
